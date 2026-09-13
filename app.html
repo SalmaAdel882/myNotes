@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-name">My Notes</div>
+    </div>
+
+    <div class="welcome">
+      <div class="welcome-label">Welcome back,</div>
+      <div class="welcome-name">Salma Adel</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">MAIN</div>
+      <div class="nav-item " data-view="all">
+        <span class="nav-left">
+        <i class="fa-regular fa-note-sticky" style="color: rgb(140, 139, 139);"></i>
+          All Notes
+        </span>
+        <span class="nav-count" id="count-all">0</span>
+      </div>
+      <div class="nav-item" data-view="favorites">
+        <span class="nav-left">
+          <i class="fa-regular fa-heart" style="color: rgb(140, 139, 139);"></i>
+          Favorites
+        </span>
+        <span class="nav-count" id="count-favorites">0</span>
+      </div>
+      <div class="nav-item" data-view="pinned">
+        <span class="nav-left">
+        <i class="fa-solid fa-thumbtack" style="color: rgb(140, 139, 139);"></i>
+          Pinned
+        </span>
+        <span class="nav-count" id="count-pinned">0</span>
+        </div>
+      <div class="nav-item" data-view="archive">
+        <span class="nav-left">
+       <i class="fa-solid fa-box-archive"></i>
+          Archive
+        </span>
+        <span class="nav-count" id="count-archive">0</span>
+        </div>
+
+      <div class="nav-item" data-view="trash">
+        <span class="nav-left">
+          <i class="fa-regular fa-trash-can" style="color: rgb(140, 139, 139);"></i>
+          Trash
+        </span>
+        <span class="nav-count" id="count-trash">0</span>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">CATEGORIES</div>
+      <div class="nav-item" data-view="cat-study">
+        <span class="nav-left">
+         <i class="fa-solid fa-graduation-cap" style="color: rgb(140, 139, 139);"></i>
+          Study
+        </span>
+        <span class="nav-count" id="count-cat-study">0</span>
+      </div>
+      <div class="nav-item" data-view="cat-projects">
+        <span class="nav-left">
+        <i class="fa-solid fa-folder" style="color: rgb(140, 139, 139);"></i>
+          Projects
+        </span>
+        <span class="nav-count" id="count-cat-projects">0</span>
+      </div>
+      <div class="nav-item" data-view="cat-ideas">
+        <span class="nav-left">
+          <i class="fa-solid fa-lightbulb" style="color: rgb(140, 139, 139);"></i>
+          Ideas
+        </span>
+        <span class="nav-count" id="count-cat-ideas">0</span>
+      </div>
+      <div class="nav-item" data-view="cat-personal">
+        <span class="nav-left">
+          <i class="fa-solid fa-user" style="color: rgb(140, 139, 139);"></i>
+          Personal
+        </span>
+        <span class="nav-count" id="count-cat-personal">0</span>
+      </div>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-bottom">
+      <div class="nav-item" id="theme-toggle-nav">
+        <span class="nav-left">
+            <i class="fa-solid fa-moon" style="color: rgb(140, 139, 139);"></i>
+          Dark Mode
+        </span>
+      </div>
+    </div>
+
+    <div class="user-card">
+      <div class="user-avatar">SA</div>
+      <div>
+        <div class="user-info-name">Salma Adel</div>
+        <div class="user-info-email">
+            salmaadel@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="icon-btn menu-btn" id="menuBtn">
+       <i class="fa-solid fa-bars" style="color: rgb(140, 139, 139);"></i>
+      </div>
+      <div class="search-box">
+       <i class="fa-solid fa-magnifying-glass" style="color: rgb(140, 139, 139);"></i>
+        <input type="text" id="searchInput" placeholder="Search notes ...">
+      
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="icon-btn" id="themeToggleTop" title="Toggle dark mode">
+        <i class="fa-solid fa-moon" style="color: rgb(140, 139, 139);"></i>
+      </div>
+      <div class="user-avatar" style="width:38px;height:38px;font-size:13px;">SA</div>
+    </div>
+
+    <div class="content">
+      <div class="content-head">
+        <div>
+          <div class="content-title" id="viewTitle">All Notes</div>
+          <div class="content-sub" id="viewSub">Everything you've written, in one place</div>
+        </div>
+        <div class="head-actions">
+          <select class="select-sort" id="sortSelect">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="az">Title A–Z</option>
+            <option value="za">Title Z–A</option>
+          </select>
+          <button class="btn-primary" id="newNoteBtn">
+            <i class="fa-solid fa-plus" style="color: rgb(255, 255, 255);"></i>
+            New note
+          </button>
+        </div>
+      </div>
+
+      <div class="chip-row" id="chipRow">
+        <div class="chip active" data-filter="all">All</div>
+        <div class="chip" data-filter="study">Study</div>
+        <div class="chip" data-filter="projects">Projects</div>
+        <div class="chip" data-filter="ideas">Ideas</div>
+        <div class="chip" data-filter="personal">Personal</div>
+        <div class="chip" data-filter="general">General</div>
+      </div>
+
+      <div class="notes-grid" id="notesGrid">
+        
+      </div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="3"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/></svg>
+        <h3>No notes here</h3>
+        <p>Create a new note or try a different search or filter.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">New note</h3>
+      <div class="modal-close" id="modalClose">
+        <i class="fa-solid fa-xmark" style="color: rgb(140, 139, 139);"></i>
+      </div>
+    </div>
+    <div class="field">
+      <label for="noteTitleInput">Title</label>
+      <input type="text" id="noteTitleInput" placeholder="Give your note a title">
+    </div>
+    <div class="field">
+      <label for="noteBodyInput">Note</label>
+      <textarea id="noteBodyInput" placeholder="Write something..."></textarea>
+    </div>
+    <div class="field">
+  <label for="noteTypeSelect">Type</label>
+  <select id="noteTypeSelect">
+    <option value="note">Regular Note</option>
+    <option value="task">Task Card </option>
+  </select>
+</div>
+    <div class="field-row">
+      <div class="field">
+        <label for="noteCategoryInput">Category</label>
+        <select id="noteCategoryInput">
+          <option value="study">Study</option>
+          <option value="projects">Projects</option>
+          <option value="ideas">Ideas</option>
+          <option value="personal">Personal</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+    </div>
+ 
+    <div class="field">
+      <label>Note Color</label>
+      <div class="color-picker-row" id="colorPickerRow">
+        <div class="color-dot selected" data-color="lavender" style="background: var(--note-lavender);" title="Lavender"></div>
+        <div class="color-dot" data-color="mint" style="background: var(--note-mint);" title="Mint"></div>
+        <div class="color-dot" data-color="pink" style="background: var(--note-pink);" title="Pink"></div>
+        <div class="color-dot" data-color="blue" style="background: var(--note-blue);" title="Blue"></div>
+        <div class="color-dot" data-color="peach" style="background: var(--note-peach);" title="Peach"></div>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" id="cancelBtn">Cancel</button>
+      <button class="btn-primary" id="saveNoteBtn">Save note</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="main.js"></script>
+</body>
+</html>

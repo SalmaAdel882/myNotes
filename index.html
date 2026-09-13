@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — My Notes</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+  :root{
+    --bg-page:#f4f6fb;
+    --bg-card:#ffffff;
+    --text-main:#0f172a;
+    --text-muted:#64748b;
+    --border:#e2e8f0;
+    --accent:#0d9488;
+    --accent-hover:#0f766e;
+    --accent-soft:#ccfbf1;
+    --danger:#e11d48;
+    --radius-xl:28px;
+    --radius-md:14px;
+  }
+
+  [data-theme="dark"]{
+    --bg-page:#090d16;
+    --bg-card:#111827;
+    --text-main:#f8fafc;
+    --text-muted:#94a3b8;
+    --border:#1f2937;
+    --accent:#14b8a6;
+    --accent-hover:#0d9488;
+    --accent-soft:#134e4a;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:"Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+    padding: 20px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  /* الحاوية الرئيسية للتصميم الجديد */
+  .login-container {
+    width: 900px;
+    max-width: 100%;
+    min-height: 520px;
+    background: var(--bg-card);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  @media (max-width: 768px) {
+    .login-container {
+      grid-template-columns: 1fr;
+      max-width: 420px;
+    }
+    .login-banner { display: none; }
+  }
+
+  /* جانب جمالي ترحيبي (Banner) */
+  .login-banner {
+    background: linear-gradient(135deg, var(--accent), #0f766e);
+    color: #fff;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-banner::after {
+    content: '';
+    position: absolute;
+    width: 250px; height: 250px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    bottom: -50px; right: -50px;
+  }
+
+  .banner-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  .banner-logo {
+    width: 40px; height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+
+  .banner-content h2 {
+    font-size: 28px;
+    line-height: 1.3;
+    margin: 0 0 10px 0;
+    font-weight: 800;
+  }
+
+  .banner-content p {
+    font-size: 14px;
+    opacity: 0.85;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .banner-footer {
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  /* جانب نموذج الدخول (Form Side) */
+  .login-form-side {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .theme-toggle {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 38px; height: 38px;
+    border-radius: var(--radius-md);
+    background: var(--bg-page);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+  .form-header {
+    margin-bottom: 28px;
+  }
+
+  .form-header h1 {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 6px 0;
+  }
+
+  .form-header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .input-group {
+    margin-bottom: 18px;
+  }
+
+  .input-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--bg-page);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    transition: all 0.2s ease;
+  }
+
+  .input-wrapper i {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .input-wrapper input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-main);
+    font-family: inherit;
+  }
+
+  .input-wrapper input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+
+  .input-wrapper:focus-within {
+    border-color: var(--accent);
+    background: var(--bg-card);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  /* حالة الخطأ: الإطار بيبقى أحمر لو فيه رسالة خطأ ظاهرة */
+  .input-group.has-error .input-wrapper {
+    border-color: var(--danger);
+  }
+
+  /* رسالة الخطأ تحت كل حقل، مخفية لحد ما تتفعل بكلاس show */
+  .field-error {
+    display: none;
+    font-size: 12px;
+    color: var(--danger);
+    margin-top: 6px;
+  }
+  .field-error.show {
+    display: block;
+  }
+
+  .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .remember-me input {
+    accent-color: var(--accent);
+    width: 16px; height: 16px;
+  }
+
+  .forgot-password {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .forgot-password:hover { text-decoration: underline; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 10px 20px -5px rgba(13, 148, 136, 0.4);
+    transition: all 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-1px);
+  }
+
+  .signup-prompt {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .signup-prompt a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .signup-prompt a:hover { text-decoration: underline; }
+
+  /* رسائل التوست (الإشعار العائم اللي بيظهر تحت ويختفي لوحده) */
+  .toast-wrap {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 200;
+  }
+  .toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-card);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    font-size: 13px;
+  }
+  .toast i { color: var(--danger); }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <!-- الجانب الجمالي والترحيبي -->
+  <div class="login-banner">
+    <div class="banner-brand">
+      <div class="banner-logo"><i class="fa-solid fa-pen-nib"></i></div>
+      <span>My Notes</span>
+    </div>
+    <div class="banner-content">
+      <h2>Your ideas, organized beautifully.</h2>
+      <p>Keep track of your thoughts, daily tasks, and creative projects all in one secure, seamless space.</p>
+    </div>
+    <div class="banner-footer">
+      <span>Designed for productivity &bull; 2026</span>
+    </div>
+  </div>
+
+  <!-- الجانب الخاص بنموذج الدخول -->
+  <div class="login-form-side">
+    <div class="theme-toggle" id="themeToggle" title="Toggle theme">
+      <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </div>
+
+    <div class="form-header">
+      <h1>Welcome Back</h1>
+      <p>Please enter your details to sign in.</p>
+    </div>
+
+    <form id="loginForm" action="app.html">
+      <div class="input-group" id="emailGroup">
+        <label for="emailInput">Email Address</label>
+        <div class="input-wrapper">
+          <i class="fa-regular fa-envelope"></i>
+          <input type="email" id="emailInput" placeholder="name@example.com" required autocomplete="username">
+        </div>
+        <div class="field-error" id="emailError">Please enter a valid email address.</div>
+      </div>
+
+      <div class="input-group" id="passwordGroup">
+        <label for="passwordInput">Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="passwordInput" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        <div class="field-error" id="passwordError">Please enter your password.</div>
+      </div>
+
+      <div class="form-actions">
+        <label class="remember-me">
+          <input type="checkbox" id="rememberInput">
+          Remember me
+        </label>
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Sign In <i class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i>
+      </button>
+    </form>
+
+    <div class="signup-hint signup-prompt">
+      Don't have an account? <a href="#">Sign up</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
+const emailGroup = document.getElementById("emailGroup");
+const passwordGroup = document.getElementById("passwordGroup");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+const toastWrap = document.getElementById("toastWrap");
+
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span>' + message + "</span>";
+  toastWrap.appendChild(toast);
+  setTimeout(() => toast.remove(), 2200);
+}
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+loginForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const email = emailInput.value.trim();
+  const password = passwordInput.value;
+  let hasError = false;
+
+  if (!isValidEmail(email)) {
+    emailError.classList.add("show");
+    emailGroup.classList.add("has-error");
+    hasError = true;
+  } else {
+    emailError.classList.remove("show");
+    emailGroup.classList.remove("has-error");
+  }
+
+  if (!password) {
+    passwordError.classList.add("show");
+    passwordGroup.classList.add("has-error");
+    hasError = true;
+  } else {
+    passwordError.classList.remove("show");
+    passwordGroup.classList.remove("has-error");
+  }
+
+  if (hasError) {
+    showToast("Check the highlighted fields");
+    return;
+  }
+
+  if (document.getElementById("rememberInput").checked) {
+    localStorage.setItem("myNotesRememberedEmail", email);
+  } else {
+    localStorage.removeItem("myNotesRememberedEmail");
+  }
+
+  window.location.href = "app.html";
+});
+
+emailInput.addEventListener("input", () => {
+  emailError.classList.remove("show");
+  emailGroup.classList.remove("has-error");
+});
+passwordInput.addEventListener("input", () => {
+  passwordError.classList.remove("show");
+  passwordGroup.classList.remove("has-error");
+});
+
+const rememberedEmail = localStorage.getItem("myNotesRememberedEmail");
+if (rememberedEmail) {
+  emailInput.value = rememberedEmail;
+  document.getElementById("rememberInput").checked = true;
+}
+
+const THEME_KEY = "myNotesTheme";
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.getElementById("themeIcon");
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  themeIcon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+}
+
+const savedTheme = localStorage.getItem(THEME_KEY)
+  || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+applyTheme(savedTheme);
+
+themeToggle.addEventListener("click", () => {
+  const current = document.documentElement.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  applyTheme(next);
+  localStorage.setItem(THEME_KEY, next);
+});
+</script>
+</body>
+</html>
