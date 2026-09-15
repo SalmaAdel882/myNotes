@@ -10,7 +10,7 @@
 <body>
 <div class="app-shell">
 
-  <!-- SIDEBAR -->
+
   <div class="sidebar" id="sidebar">
     <div class="brand">
       <div class="brand-mark">S</div>
@@ -19,7 +19,7 @@
 
     <div class="welcome">
       <div class="welcome-label">Welcome back,</div>
-      <div class="welcome-name">Salma Adel</div>
+      <div class="welcome-name" id="welcomeName"></div>
     </div>
 
     <div class="nav-group">
@@ -106,16 +106,16 @@
     </div>
 
     <div class="user-card">
-      <div class="user-avatar">SA</div>
+      <div class="user-avatar" id="userCardAvatar">SA</div>
       <div>
-        <div class="user-info-name">Salma Adel</div>
-        <div class="user-info-email">
-            salmaadel@gmail.com</div>
+        <div class="user-info-name" id="userCardName"></div>
+        <div class="user-info-email" id="userCardEmail">
+          </div>
       </div>
     </div>
   </div>
 
-  <!-- MAIN -->
+
   <div class="main">
     <div class="topbar">
       <div class="icon-btn menu-btn" id="menuBtn">
@@ -130,7 +130,7 @@
       <div class="icon-btn" id="themeToggleTop" title="Toggle dark mode">
         <i class="fa-solid fa-moon" style="color: rgb(140, 139, 139);"></i>
       </div>
-      <div class="user-avatar" style="width:38px;height:38px;font-size:13px;">SA</div>
+      <div class="user-avatar" id="topbarAvatar" style="width:38px;height:38px;font-size:13px;">SA</div>
     </div>
 
     <div class="content">
@@ -175,7 +175,7 @@
 </div>
 
 
-<!-- MODAL -->
+
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <div class="modal-head">
