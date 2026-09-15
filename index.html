@@ -31,7 +31,9 @@
     --accent-soft:#134e4a;
   }
 
-  *{ box-sizing:border-box; }
+  *{ 
+    box-sizing:border-box;
+   }
 
   body{
     margin:0;
@@ -46,7 +48,6 @@
     transition: background 0.3s ease, color 0.3s ease;
   }
 
-  /* الحاوية الرئيسية للتصميم الجديد */
   .login-container {
     width: 900px;
     max-width: 100%;
@@ -69,7 +70,6 @@
     .login-banner { display: none; }
   }
 
-  /* جانب جمالي ترحيبي (Banner) */
   .login-banner {
     background: linear-gradient(135deg, var(--accent), #0f766e);
     color: #fff;
@@ -126,7 +126,6 @@
     opacity: 0.7;
   }
 
-  /* جانب نموذج الدخول (Form Side) */
   .login-form-side {
     padding: 40px;
     display: flex;
@@ -215,12 +214,10 @@
     box-shadow: 0 0 0 4px var(--accent-soft);
   }
 
-  /* حالة الخطأ: الإطار بيبقى أحمر لو فيه رسالة خطأ ظاهرة */
   .input-group.has-error .input-wrapper {
     border-color: var(--danger);
   }
 
-  /* رسالة الخطأ تحت كل حقل، مخفية لحد ما تتفعل بكلاس show */
   .field-error {
     display: none;
     font-size: 12px;
@@ -294,7 +291,6 @@
   }
   .signup-prompt a:hover { text-decoration: underline; }
 
-  /* رسائل التوست (الإشعار العائم اللي بيظهر تحت ويختفي لوحده) */
   .toast-wrap {
     position: fixed;
     bottom: 24px;
@@ -323,7 +319,6 @@
 <body>
 
 <div class="login-container">
-  <!-- الجانب الجمالي والترحيبي -->
   <div class="login-banner">
     <div class="banner-brand">
       <div class="banner-logo"><i class="fa-solid fa-pen-nib"></i></div>
@@ -338,15 +333,20 @@
     </div>
   </div>
 
-  <!-- الجانب الخاص بنموذج الدخول -->
+
   <div class="login-form-side">
     <div class="theme-toggle" id="themeToggle" title="Toggle theme">
       <i class="fa-solid fa-moon" id="themeIcon"></i>
     </div>
 
-    <div class="form-header">
+    <div class="form-header" id="loginHeader">
       <h1>Welcome Back</h1>
       <p>Please enter your details to sign in.</p>
+    </div>
+
+    <div class="form-header" id="signupHeader" style="display:none;">
+      <h1>Create Account</h1>
+      <p>Fill in your details to get started.</p>
     </div>
 
     <form id="loginForm" action="app.html">
@@ -381,8 +381,44 @@
       </button>
     </form>
 
-    <div class="signup-hint signup-prompt">
-      Don't have an account? <a href="#">Sign up</a>
+    <form id="signupForm" style="display:none;">
+      <div class="input-group" id="signupNameGroup">
+        <label for="signupNameInput">Full Name</label>
+        <div class="input-wrapper">
+          <i class="fa-regular fa-user"></i>
+          <input type="text" id="signupNameInput" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="field-error" id="signupNameError">Please enter your name.</div>
+      </div>
+
+      <div class="input-group" id="signupEmailGroup">
+        <label for="signupEmailInput">Email Address</label>
+        <div class="input-wrapper">
+          <i class="fa-regular fa-envelope"></i>
+          <input type="email" id="signupEmailInput" placeholder="name@example.com" required autocomplete="username">
+        </div>
+        <div class="field-error" id="signupEmailError">Please enter a valid email address.</div>
+      </div>
+
+      <div class="input-group" id="signupPasswordGroup">
+        <label for="signupPasswordInput">Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="signupPasswordInput" placeholder="At least 6 characters" required autocomplete="new-password">
+        </div>
+        <div class="field-error" id="signupPasswordError">Password must be at least 6 characters.</div>
+      </div>
+
+      <button type="submit" class="submit-btn" style="margin-top:6px;">
+        Create Account <i class="fa-solid fa-arrow-right-long" style="margin-left: 6px;"></i>
+      </button>
+    </form>
+
+    <div class="signup-hint signup-prompt" id="toSignupPrompt">
+      Don't have an account? <a href="#" id="showSignupLink">Sign up</a>
+    </div>
+    <div class="signup-hint signup-prompt" id="toLoginPrompt" style="display:none;">
+      Already have an account? <a href="#" id="showLoginLink">Sign in</a>
     </div>
   </div>
 </div>
@@ -399,6 +435,26 @@ const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 const toastWrap = document.getElementById("toastWrap");
 
+const signupForm = document.getElementById("signupForm");
+const signupNameInput = document.getElementById("signupNameInput");
+const signupEmailInput = document.getElementById("signupEmailInput");
+const signupPasswordInput = document.getElementById("signupPasswordInput");
+const signupNameGroup = document.getElementById("signupNameGroup");
+const signupEmailGroup = document.getElementById("signupEmailGroup");
+const signupPasswordGroup = document.getElementById("signupPasswordGroup");
+const signupNameError = document.getElementById("signupNameError");
+const signupEmailError = document.getElementById("signupEmailError");
+const signupPasswordError = document.getElementById("signupPasswordError");
+
+const loginHeader = document.getElementById("loginHeader");
+const signupHeader = document.getElementById("signupHeader");
+const toSignupPrompt = document.getElementById("toSignupPrompt");
+const toLoginPrompt = document.getElementById("toLoginPrompt");
+const showSignupLink = document.getElementById("showSignupLink");
+const showLoginLink = document.getElementById("showLoginLink");
+
+const USERS_KEY = "myNotesUsers";
+
 function showToast(message) {
   const toast = document.createElement("div");
   toast.className = "toast";
@@ -411,33 +467,149 @@ function isValidEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function getUsers() {
+  try {
+    return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveUsers(users) {
+  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+}
+
+function setFieldError(group, errorEl, isError, message) {
+  if (message) errorEl.textContent = message;
+  group.classList.toggle("has-error", isError);
+  errorEl.classList.toggle("show", isError);
+}
+
+function switchToSignup() {
+  loginForm.style.display = "none";
+  loginHeader.style.display = "none";
+  toSignupPrompt.style.display = "none";
+
+  signupForm.style.display = "block";
+  signupHeader.style.display = "block";
+  toLoginPrompt.style.display = "block";
+}
+
+function switchToLogin(prefillEmail) {
+  signupForm.style.display = "none";
+  signupHeader.style.display = "none";
+  toLoginPrompt.style.display = "none";
+
+  loginForm.style.display = "block";
+  loginHeader.style.display = "block";
+  toSignupPrompt.style.display = "block";
+
+  if (prefillEmail) {
+    emailInput.value = prefillEmail;
+    passwordInput.value = "";
+    passwordInput.focus();
+  }
+}
+
+showSignupLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  switchToSignup();
+});
+
+showLoginLink.addEventListener("click", (event) => {
+  event.preventDefault();
+  switchToLogin();
+});
+
+signupForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const name = signupNameInput.value.trim();
+  const email = signupEmailInput.value.trim().toLowerCase();
+  const password = signupPasswordInput.value;
+  let hasError = false;
+
+  setFieldError(signupNameGroup, signupNameError, !name);
+  if (!name) hasError = true;
+
+  const validEmail = isValidEmail(email);
+  setFieldError(signupEmailGroup, signupEmailError, !validEmail,
+    "Please enter a valid email address.");
+  if (!validEmail) hasError = true;
+
+  const validPassword = password.length >= 6;
+  setFieldError(signupPasswordGroup, signupPasswordError, !validPassword,
+    "Password must be at least 6 characters.");
+  if (!validPassword) hasError = true;
+
+  if (hasError) {
+    showToast("Check the highlighted fields");
+    return;
+  }
+
+  const users = getUsers();
+  if (users[email]) {
+    setFieldError(signupEmailGroup, signupEmailError, true,
+      "An account with this email already exists.");
+    showToast("Account already exists — try signing in");
+    return;
+  }
+
+  users[email] = { name, password };
+  saveUsers(users);
+
+  signupForm.reset();
+  showToast("Account created! Please sign in.");
+  switchToLogin(email);
+});
+
+[signupNameInput, signupEmailInput, signupPasswordInput].forEach((input) => {
+  input.addEventListener("input", () => {
+    const group = input.closest(".input-group");
+    const error = group.querySelector(".field-error");
+    group.classList.remove("has-error");
+    error.classList.remove("show");
+  });
+});
 loginForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  const email = emailInput.value.trim();
+  const email = emailInput.value.trim().toLowerCase();
   const password = passwordInput.value;
   let hasError = false;
 
   if (!isValidEmail(email)) {
-    emailError.classList.add("show");
-    emailGroup.classList.add("has-error");
+    setFieldError(emailGroup, emailError, true, "Please enter a valid email address.");
     hasError = true;
   } else {
-    emailError.classList.remove("show");
-    emailGroup.classList.remove("has-error");
+    setFieldError(emailGroup, emailError, false);
   }
 
   if (!password) {
-    passwordError.classList.add("show");
-    passwordGroup.classList.add("has-error");
+    setFieldError(passwordGroup, passwordError, true, "Please enter your password.");
     hasError = true;
   } else {
-    passwordError.classList.remove("show");
-    passwordGroup.classList.remove("has-error");
+    setFieldError(passwordGroup, passwordError, false);
   }
 
   if (hasError) {
     showToast("Check the highlighted fields");
+    return;
+  }
+
+  const users = getUsers();
+  const account = users[email];
+
+  if (!account) {
+    setFieldError(emailGroup, emailError, true,
+      "No account found with this email. Please sign up first.");
+    showToast("No account found — sign up first");
+    return;
+  }
+
+  if (account.password !== password) {
+    setFieldError(passwordGroup, passwordError, true, "Incorrect password.");
+    showToast("Incorrect password");
     return;
   }
 
@@ -447,16 +619,19 @@ loginForm.addEventListener("submit", (event) => {
     localStorage.removeItem("myNotesRememberedEmail");
   }
 
+  localStorage.setItem("myNotesCurrentUser", JSON.stringify({
+    name: account.name,
+    email: email
+  }));
+
   window.location.href = "app.html";
 });
 
 emailInput.addEventListener("input", () => {
-  emailError.classList.remove("show");
-  emailGroup.classList.remove("has-error");
+  setFieldError(emailGroup, emailError, false);
 });
 passwordInput.addEventListener("input", () => {
-  passwordError.classList.remove("show");
-  passwordGroup.classList.remove("has-error");
+  setFieldError(passwordGroup, passwordError, false);
 });
 
 const rememberedEmail = localStorage.getItem("myNotesRememberedEmail");
