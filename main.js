@@ -1,3 +1,44 @@
+
+(function () {
+  const CURRENT_USER_KEY = "myNotesCurrentUser";
+  const raw = localStorage.getItem(CURRENT_USER_KEY);
+
+  if (!raw) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  let currentUser;
+  try {
+    currentUser = JSON.parse(raw);
+  } catch (e) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const name = currentUser.name || "User";
+  const email = currentUser.email || "";
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  const welcomeName = document.getElementById("welcomeName");
+  const userCardName = document.getElementById("userCardName");
+  const userCardEmail = document.getElementById("userCardEmail");
+  const userCardAvatar = document.getElementById("userCardAvatar");
+  const topbarAvatar = document.getElementById("topbarAvatar");
+
+  if (welcomeName) welcomeName.textContent = name;
+  if (userCardName) userCardName.textContent = name;
+  if (userCardEmail) userCardEmail.textContent = email;
+  if (userCardAvatar) userCardAvatar.textContent = initials;
+  if (topbarAvatar) topbarAvatar.textContent = initials;
+})();
+
 function makeId() {
   return "n_" + Math.random().toString(36).slice(2, 10);
 }
